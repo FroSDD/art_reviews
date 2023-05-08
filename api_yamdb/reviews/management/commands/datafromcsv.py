@@ -1,13 +1,10 @@
 import csv
 import logging
 
-from django.core.management.base import BaseCommand
-from django.contrib.auth import get_user_model
 from django.conf import settings
-
-from reviews.models import (Category, Genre, Title, GenreTitle,
-                            Review, Comment)
-
+from django.contrib.auth import get_user_model
+from django.core.management.base import BaseCommand
+from reviews.models import Category, Comment, Genre, GenreTitle, Review, Title
 
 User = get_user_model()
 

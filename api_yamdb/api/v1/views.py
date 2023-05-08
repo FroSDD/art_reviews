@@ -3,21 +3,21 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets, filters, mixins, permissions
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, mixins, permissions, status, viewsets
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.decorators import api_view, action, permission_classes
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
-from django_filters.rest_framework import DjangoFilterBackend
+from reviews.models import Category, Genre, Review, Title
 
-from reviews.models import Category, Genre, Title, Review
-from .serializers import (RegistrationSerializer, TokenAproveSerializer,
-                          UserSerializer, CategorySerializer, GenreSerializer,
-                          TitleSerializer, ReviewSerializer, CommentSerializer)
-from .permissions import (IsAdmin, IsAdminOrReadOnly,
-                          IsAdminModeratorAuthorOrReadOnly)
 from .filters import TitleFilterSet
-
+from .permissions import (IsAdmin, IsAdminModeratorAuthorOrReadOnly,
+                          IsAdminOrReadOnly)
+from .serializers import (CategorySerializer, CommentSerializer,
+                          GenreSerializer, RegistrationSerializer,
+                          ReviewSerializer, TitleSerializer,
+                          TokenAproveSerializer, UserSerializer)
 
 User = get_user_model()
 
@@ -132,8 +132,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminModeratorAuthorOrReadOnly,)
 
     def get_queryset(self):
-        title = Review.objects.filter(title__id=self.kwargs.get('title_id'))
-        return title
+        return Review.objects.filter(title__id=self.kwargs.get('title_id'))
 
     def perform_create(self, serializer):
         title = get_object_or_404(Title, pk=self.kwargs['title_id'])
