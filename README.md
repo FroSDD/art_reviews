@@ -18,91 +18,51 @@ http://127.0.0.1:8000/redoc/
 ```
 После запуска проекта.
 
-### Как запустить проект:
+### Как запустить проект на удаленном сервере:
 Клонировать репозиторий и перейти в него в командной строке:
 ```
-git@github.com:tWoAlex/api_yamdb.git
-```
-```
-cd api_final_yatube
+https://github.com/FroSDD/yamdb_final
 ```
 
-Cоздать и активировать виртуальное окружение:
+Выполнить вход на свой удаленный сервер
+
+Произвести установку docker:
 ```
-python3 -m venv env
-```
-```
-source env/bin/activate
+sudo apt install docker.io
 ```
 
-Установить зависимости из файла requirements.txt:
+Установить docker-compose:
 ```
-python3 -m pip install --upgrade pip
-```
-```
-pip install -r requirements.txt
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 ```
 
-Выполнить миграции:
+Запустить docker-compose:
 ```
-python3 manage.py migrate
-```
-
-Запустить проект:
-```
-python3 manage.py runserver
+docker-compose up -d --build
 ```
 
-### Примеры запросов:
-Публикация обзора:
+Собрать файлы статики и выполнить миграции:
 ```
-POST /api/v1/titles/{title_id}/reviews/
-Тело: { "text": "Текст вашего обзора", "score": "оценка произведения" }
+docker-compose exec web python3 manage.py makemigrations
 ```
-Просмотр обзоров:
 ```
-GET /api/v1/titles/{title_id}/reviews/
-Ответ:
-{
-  "count": 0,
-  "next": "string",
-  "previous": "string",
-  "results": [
-    {
-      "id": 0,
-      "text": "string",
-      "author": "string",
-      "score": 1,
-      "pub_date": "2019-08-24T14:15:22Z"
-    }
-  ]
-}
+docker-compose exec web python3 manage.py migrate
 ```
-Публикация комментария:
 ```
-POST /api/v1/titles/{title_id}/reviews/{review_id}/comments/
-Тело: { "text": "Текст вашего комментария" }
+docker-compose exec web python3 manage.py collectstatic --no-input
 ```
-Просмотр комментариев:
+Создать суперпользователя:
 ```
-GET /api/v1/titles/{title_id}/reviews/{review_id}/comments/
-Ответ:
-{
-  "count": 0,
-  "next": "string",
-  "previous": "string",
-  "results": [
-    {
-      "id": 0,
-      "text": "string",
-      "author": "string",
-      "pub_date": "2019-08-24T14:15:22Z"
-    }
-  ]
-}
+docker-compose exec web python3 manage.py createsuperuser
 ```
 
 ### Использованные технологии:
-* Django 3.2
-* Django Rest Framework 3.12.4
-* DRF SimpleJWT 4.7.2
+* Django
+* Django Rest Framework
+* Nginx
+* PostgreSQL
+* Docker
+* GitHub Actions
+
+### Развернутый проект:
+http://158.160.50.119/api/v1/
