@@ -65,4 +65,4 @@ docker-compose exec web python3 manage.py createsuperuser
 * GitHub Actions
 
 ### Развернутый проект:
-http://158.160.50.119/api/v1/
+http://158.160.104.159/api/v1/
