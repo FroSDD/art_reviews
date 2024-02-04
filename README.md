@@ -66,3 +66,8 @@ docker-compose exec web python3 manage.py createsuperuser
 
 ### Развернутый проект:
 http://158.160.104.159/api/v1/
+
+### Автор: 
+[Anton Novikov](https://github.com/FroSDD/)
+
+E-mail: novikov.an_v@mail.ru
